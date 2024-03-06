@@ -1,0 +1,450 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<style>
+ .star-ratings-css {
+  unicode-bidi: bidi-override;
+  color: #c5c5c5;
+  font-size: 24px;
+  height: 25px;
+  width: 100px;
+  position: relative;
+  padding: 0;
+  margin-bottom: 10px !important;
+  text-shadow: 0px 1px 0 #a2a2a2;
+  
+  .star-ratings-css-top {
+    color: #e7711b;
+    padding: 0;
+    text-shadow: 0px 1px 0 #ab5414;
+    position: absolute;
+    z-index: 1;
+    display:block;
+    left: 0px;
+    overflow: hidden;
+  }
+  .star-ratings-css-bottom { z-index: 0; }
+}
+</style>
+<body class="bg-gradient-to-r from-indigo-300 bg-slate-50">
+        <div class="rounded container mx-auto bg-white p-10 drop-shadow-lg mt-10 mb-10">
+            <!-- search -->
+            <div>
+                <div class="mb-2">
+                    <label class="font-sans text-lg font-semibold text-gray-900">COPY & PASTE AN AMAZON PRODUCT PAGE URL</label>
+                </div>
+
+                <div id="error-message" style="display: none;" class="flex items-center p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+                    <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+                    </svg>
+                    <span class="sr-only">Info</span>
+                    <div id="message">
+                      
+                    </div>
+                </div>
+               
+                    <div class="relative">
+                        <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                <path stroke="currentColor"   d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                            </svg>
+                        </div>
+                        <input type="search" id="search"  class="block w-full p-4 ps-10 pr-24 text-sm text-gray-900 border rounded outline-none" placeholder="Search" required />
+                        <button  onclick="search()" type="submit" class="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search</button>
+                    </div>
+           
+            </div>
+            <div>
+                <!-- <div style="display: none;" role="status" class="flex justify-center mt-10" id="loader" >
+                    <svg aria-hidden="true" class="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
+                        <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
+                    </svg>
+                    <span class="sr-only">Loading...</span>
+                </div> -->
+                <!-- <div id="search-result"></div> -->
+                <!-- <div id="review"></div> -->
+                <div class="round shadow-lg border mt-5">
+                    <div>
+                        <div class="font-bold text-md mb-2 border-b-2 px-6 py-4">Product Details</div>
+                    </div>
+                    <div class="px-6 py-4">
+                        <div id="search-result"> No Data</div>
+                    </div>
+                </div>
+
+                <div class="round shadow-lg mt-5 border">
+                    <div>
+                        <div class="font-bold text-md mb-2 border-b-2 px-6 py-4">Possible Fake Reviews</div>
+                    </div>
+                    <div class="px-6 py-4">
+                        <div id="review">No data</div>
+                    </div>
+                </div>
+
+                <div class="round shadow-lg mt-5 border">
+                    <div>
+                        <div class="font-bold text-md mb-2 border-b-2 px-6 py-4">Verified and Unverified Purchases</div>
+                    </div>
+                    <div class="px-6 py-4">
+                        <div id="vu-chart">
+                            <div class="chart-loader">No Data</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="round shadow-lg mt-5 border">
+                    <div>
+                        <div class="font-bold text-md mb-2 border-b-2 px-6 py-4">Word Count (Reviews)</div>
+                    </div>
+                    <div class="px-6 py-4">
+                        <div id="wc-chart">
+                            <div class="chart-loader">No Data</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+</body>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+<script>
+
+    //initialize axios
+    const _axios = axios.create({
+        //endpoint
+        baseURL:"http://13.212.90.26:8080"
+    })
+    var verified = [];
+    var unverified=[];
+    //chart id
+    let chart_id = ["chart1","chart2"];
+    //mapping the word for positive and negative
+    const positive_word = ["amazing","love it","good product","i love this product","excellent","awesome product","good stuff","quality is good"];
+    const negative_word = ["pathetic","suck","sucks","terrible"]
+
+
+    window.addEventListener("keypress",function(event){
+        if(event.key == "Enter"){
+            search();
+        }
+        return false;
+    })
+    function search(){
+        //get the value of search
+        const url = document.querySelector("#search").value;
+
+        if(url == "") { document.getElementById("message").innerHTML = '<span class="font-medium">Error Notice!</span> Please enter amazon page url to continue';document.getElementById("error-message").style.display=''; return false;}
+        //split the value 
+        const url_split = url.split("/");
+
+        if(url_split.length <= 5){{ document.getElementById("message").innerHTML = '<span class="font-medium">Error Notice!</span> Invalid url';document.getElementById("error-message").style.display=''; return false;}}
+        document.getElementById("error-message").style.display='none';
+        //get the array value of 3
+        const id1 = url_split[3];
+        //get the array value of index 5 (asin for amazon or product id)
+        const id2 = url_split[5].trim();
+        
+        //object word count
+        let word_count = {
+            word0:0,
+            word1:0,
+            word2:0,
+            word3:0,
+            word4:0,
+            word5:0,
+            word6:0,
+            word7:0,
+            word8:0,
+            word9:0,
+            word10:0,
+        }
+
+        //parameter request value
+        const params = {
+            url:"product-reviews/"+id2 
+        }
+        // document.getElementById("loader").style.display = "flex";
+        document.querySelector("#search-result").innerHTML  = loader2();
+        document.querySelector("#review").innerHTML         = loader3();
+        //diplay loader for all chart-loader class
+        const loader_contents = document.querySelectorAll(".chart-loader");
+        //loop for chart loader
+        for(var a = 0; a < loader_contents.length; a++ ){
+            loader_contents[a].innerHTML = loader4();
+        }
+        //request to api
+        _axios.get("/productDetail",{params:params})
+        .then((res)=>{
+            const data = res.data;
+            //mapping review 
+            data.data.review.map((item)=>{
+                let review_count = item.review.split(" ");
+                //count the word of review 
+                if(review_count.length >= 0 && review_count.length <= 10){
+                    word_count.word0+=1;
+                }
+                else if(review_count.length >= 11 && review_count.length <= 20){
+                    word_count.word1+=1;
+                }
+                else if(review_count.length >= 21 && review_count.length <= 30){
+                    word_count.word2+=1;
+                }
+                else if(review_count.length >= 31 && review_count.length <= 40){
+                    word_count.word3+=1;
+                }
+                else if(review_count.length >= 41 && review_count.length <= 50){
+                    word_count.word4+=1;
+                }
+                else if(review_count.length >= 51 && review_count.length <= 60){
+                    word_count.word5+=1;
+                }
+                else if(review_count.length >= 61 && review_count.length <= 70){
+                    word_count.word6+=1;
+                }
+                else if(review_count.length >= 71 && review_count.length <= 80){
+                    word_count.word7+=1;
+                }
+                else if(review_count.length >= 81 && review_count.length <= 90){
+                    word_count.word8+=1;
+                }
+                else if(review_count.length >= 91 && review_count.length <= 100){
+                    word_count.word9+=1;
+                }
+                else{
+                    word_count.word10+=1;
+                }
+                //check if the badge is verified or not
+                if(item.badge == "Verified Purchase"){
+                    verified.push(item);
+                }
+                else{
+                    unverified.push(item);
+                }
+            })
+
+            // document.getElementById("loader").style.display = "none";
+
+            //display content after success request
+            document.querySelector("#search-result").innerHTML = product_detail(data);
+            document.querySelector("#review").innerHTML = review_detail(data);
+            //map chart id 
+            chart_id.map((item,index)=>{
+                //bar chart
+                if(item == "chart1"){
+                    let uv_content = "<p class='text-sm mt-2'>Unverified purchases may be the result of Kindle Unlimited readers, buyers who didn't pay full price, or reviewers who did not purchase the product at Amazon.<br> <a target='_blank' href='https://reviewmeta.com/blog/unverified-purchases' class='text-sky-600 hover:decoration-blue-400'>Read more about our Unverified Purchases test.</a></p>";
+                    loader_contents[index].innerHTML = `<canvas id="${item}"></canvas>`+uv_content;
+                    //label
+                    let x =["Verified", "Unverified"]
+                    var y = [];
+                    let color = ["green", "red"]
+                    //get total user
+                    let total_user = verified.length + unverified.length;
+                    //get the percentage
+                    y.push( Math.round(verified.length/total_user * 100));
+                    y.push(Math.round(unverified.length/total_user * 100));
+                    //call function of bar chart
+                    bar_chart(item,x,y,color)
+                }
+                else{
+                    //line chart 
+                    loader_contents[index].innerHTML = `<canvas id="${item}"></canvas>`;
+                    //label
+                    let x_line = ["0-10","11-20","21-30","31-40","41-50","51-60","61-70","71-80","81-90","91-100","100+"];
+                    //value of y
+                    let y_line = [];
+                    //get the word_count value per param
+                    for(var a = 0; a <= 10;a++){
+                        y_line.push(word_count["word"+a]);
+                    }
+                    //call function 
+                    line_chart(item,x_line,y_line,"word count")
+                }
+            })
+        })
+        .catch(err=>console.log(err))
+    }
+
+    //start rating 
+    function star(rate){
+        let rating = (rate * 10) * 2;
+        return `
+            <div class="star-ratings-css" style="margin: 0 auto">
+                <div class="star-ratings-css-top" style="width: ${rating}%"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                </div>
+                <div class="star-ratings-css-bottom"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                </div>
+            </div>
+        `;
+    }
+    //display product detail
+    function product_detail(data){
+        let content = "<div class='mt-5 mb-5'>";
+            content+="<h1 class='text-xl text-gray-900 font-bold'>"+data.data.title+"</h1>";
+            content+=`<div class="flex justify-evenly items-center flex-row mt-5">
+                <img class="object-cover h-64 w-64" src="${data.data.image}" />
+                <div class="rounded shadow-lg max-w-lg flex items-center h-48">
+                    <div class="px-6 py-4">
+                        <div class="font-bold text-3xl mb-2 text-center"> Amazon Ratings </div>
+                        <p class="font-bold text-2xl text-center">${data.data.star_rating.replace(" out of 5","")}</p>
+                        ${star(data.data.star_rating.replace(" out of 5",""))}
+                        <div id="rate"></div>
+                        <p class="text-xl text-center">${data.data.rating}</p>
+                    </div>    
+                </div>
+            </div>`;
+            content+="</div>";
+        return content;
+    }
+    //diplay review detail
+    function review_detail(data){
+        let is_duplicate    = [];
+        let duplicate_item  = [];
+        let fake_review     = [];
+
+        let review_content = "<div class=' px-20 h-96 overflow-y-auto'>";
+            data.data.review.map((item)=>{
+                let star_count = (item.rating * 10) * 2;
+                //check if user has multiple review
+                if(is_duplicate.includes(data.data.username)){
+                        //save duplicate user
+                        duplicate_item.push(item);
+                        fake_review.push(item);
+                        review_content+=review_item_display(item,star_count);
+                }
+                else{
+                        is_duplicate.push(item.username);
+                        const split_review = item.review.toLowerCase().split(" ");
+                        //check if the review content is less than 16
+                        if(split_review.length <= 15 ){
+                            review_content+= review_item_display(item,star_count)
+                            fake_review.push(item);
+                        }   
+                        else{
+                            //more than 16 words
+                            //check if word contains the postive word set
+                            positive_word.map((word)=>{
+                                if(split_review.includes(word)){
+                                    review_content+= review_item_display(item,star_count)
+                                    fake_review.push(item);
+                                }
+                            })
+
+                            //check if word contains the negative word set
+                            negative_word.map((word)=>{
+                                if(split_review.includes(word)){
+                                    review_content+= review_item_display(item,star_count)
+                                    fake_review.push(item);
+                                }
+                            })
+                        }
+                    
+                    }
+                })
+
+            review_content+="</div>";
+            return review_content;
+    }
+
+    function review_item_display(item,star_count){
+                    return`
+                            <ul class="divide-y divide-gray-200 dark:divide-gray-700">
+                                <li class="pb-3 sm:pb-4 mt-5">
+                                    <div class="flex space-x-4 rtl:space-x-reverse">
+                                        <div>
+                                            <img class="w-8 h-8 rounded-full" src="https://images-na.ssl-images-amazon.com/images/S/amazon-avatars-global/default._CR0,0,1024,1024_SX48_.png" alt="Neil image">
+                                        </div>
+                                        <div class="flex-1 min-w-0">
+                                            <p class="text-xl font-medium text-gray-900 truncate dark:text-white">${item.name} </p>
+                                            <p class="text-xs font-medium mt-1 text-amber-600 truncate dark:text-white">${item.badge} </p>
+                                                <div class="star-ratings-css">
+                                                    <div class="star-ratings-css-top" style="width: ${star_count}%"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                                                    </div>
+                                                    <div class="star-ratings-css-bottom"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                                                    </div>
+                                                </div>
+                                            <p class="text-sm text-gray-600 dark:text-gray-600">${item.review}</p>
+                                            <code class="text-xs text-gray-400 dark:text-gray-400">${item.date}</code>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>`;
+    }
+
+//bar chart
+function bar_chart(id,x,y,color){
+
+        document.getElementById(id).style.height = "200px";
+        document.getElementById(id).style.width = "100%";
+        new Chart(id, {
+        type: "horizontalBar",
+        data: {
+            labels: x,
+            datasets: [{
+            backgroundColor: color,
+            data: y
+            }]
+        },
+        options: {
+            legend: {display: false},
+            title: {
+            display: true,
+            },
+            indexAxis:'y',
+            plugins: {
+                tooltip: {
+                    intersect: false
+                }
+            }
+        }
+        });
+}
+//line chart
+function line_chart(id,x,y,label){
+    document.getElementById(id).style.height = "200px";
+    document.getElementById(id).style.width = "100%";
+        new Chart(id, {
+            type: "line",
+            data: {
+                labels: x,
+                datasets: [
+                    {
+                        label:label,
+                        data: y,
+                        borderColor: "gray",
+                        fill: true
+                    }
+                ]
+            },
+            options: {
+                legend: {display: false},
+                    tooltips: {
+                        intersect: false
+                    }
+            
+            }
+    });
+}
+
+    function loader(){
+        return '<div class="shadow rounded-md"> <div class="animate-pulse flex space-x-4"> <div class="rounded-full bg-slate-200 h-10 w-10"></div> <div class="flex-1 space-y-6 py-1"> <div class="h-2 bg-slate-200 rounded"></div> <div class="space-y-3"> <div class="grid grid-cols-3 gap-4"> <div class="h-2 bg-slate-200 rounded col-span-2"></div> <div class="h-2 bg-slate-200 rounded col-span-1"></div> </div> <div class="h-2 bg-slate-200 rounded"></div> </div> </div> </div> </div>';
+    }
+    function loader2(){
+        return '<div role="status" class="flex items-center justify-center h-56  bg-gray-300 rounded-lg animate-pulse dark:bg-gray-700"> <svg class="w-10 h-10 text-gray-200 dark:text-gray-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 20"> <path d="M5 5V.13a2.96 2.96 0 0 0-1.293.749L.879 3.707A2.98 2.98 0 0 0 .13 5H5Z"/> <path d="M14.066 0H7v5a2 2 0 0 1-2 2H0v11a1.97 1.97 0 0 0 1.934 2h12.132A1.97 1.97 0 0 0 16 18V2a1.97 1.97 0 0 0-1.934-2ZM9 13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-2a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2Zm4 .382a1 1 0 0 1-1.447.894L10 13v-2l1.553-1.276a1 1 0 0 1 1.447.894v2.764Z"/> </svg> <span class="sr-only">Loading...</span></div>';
+    }
+    function loader3(){
+        return '<div role="status" class="space-y-4 border border-gray-200 divide-y divide-gray-200 rounded shadow animate-pulse dark:divide-gray-700 md:p-6 dark:border-gray-700"> <div class="flex items-center justify-between"> <div> <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24 mb-2.5"></div> <div class="w-32 h-2 bg-gray-200 rounded-full dark:bg-gray-700"></div> </div> <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-12"></div> </div> <div class="flex items-center justify-between pt-4"> <div> <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24 mb-2.5"></div> <div class="w-32 h-2 bg-gray-200 rounded-full dark:bg-gray-700"></div> </div> <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-12"></div> </div> <div class="flex items-center justify-between pt-4"> <div> <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24 mb-2.5"></div> <div class="w-32 h-2 bg-gray-200 rounded-full dark:bg-gray-700"></div> </div> <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-12"></div> </div> <div class="flex items-center justify-between pt-4"> <div> <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24 mb-2.5"></div> <div class="w-32 h-2 bg-gray-200 rounded-full dark:bg-gray-700"></div> </div> <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-12"></div> </div> <div class="flex items-center justify-between pt-4"> <div> <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24 mb-2.5"></div> <div class="w-32 h-2 bg-gray-200 rounded-full dark:bg-gray-700"></div> </div> <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-12"></div> </div> <span class="sr-only">Loading...</span></div>'
+    }
+    function loader4(){
+        return '<div role="status" class="animate-pulse"> <div class="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mb-4"></div> <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[360px] mb-2.5"></div> <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5"></div> <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[330px] mb-2.5"></div> <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[300px] mb-2.5"></div> <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[360px]"></div> <span class="sr-only">Loading...</span></div>';
+    }
+</script>
+
+</html>
